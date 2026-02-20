@@ -1,6 +1,8 @@
-// File: UseCase4PalindromeCheckerApp.java
+// File: UseCase5PalindromeCheckerApp.java
 
-public class UseCase4PalindromeCheckerApp {
+import java.util.Stack;
+
+public class UseCase5PalindromeCheckerApp {
 
     // Application metadata
     private static final String APP_NAME = "Palindrome Checker App";
@@ -25,6 +27,12 @@ public class UseCase4PalindromeCheckerApp {
         String testStringUC4 = "level";
         System.out.println("UC4 check (using char array and two-pointer):");
         checkPalindromeUsingCharArray(testStringUC4);
+        System.out.println();
+
+        // UC5: Using stack to check palindrome
+        String testStringUC5 = "deified";
+        System.out.println("UC5 check (using stack):");
+        checkPalindromeUsingStack(testStringUC5);
     }
 
     private static void displayWelcomeMessage() {
@@ -76,6 +84,27 @@ public class UseCase4PalindromeCheckerApp {
         }
 
         if (isPalindrome) {
+            System.out.println("The string \"" + input + "\" is a palindrome.");
+        } else {
+            System.out.println("The string \"" + input + "\" is NOT a palindrome.");
+        }
+    }
+
+    private static void checkPalindromeUsingStack(String input) {
+        Stack<Character> stack = new Stack<>();
+
+        // Push all characters onto stack
+        for (int i = 0; i < input.length(); i++) {
+            stack.push(input.charAt(i));
+        }
+
+        // Pop characters to build reversed string
+        String reversed = "";
+        while (!stack.isEmpty()) {
+            reversed += stack.pop();
+        }
+
+        if (input.equals(reversed)) {
             System.out.println("The string \"" + input + "\" is a palindrome.");
         } else {
             System.out.println("The string \"" + input + "\" is NOT a palindrome.");
