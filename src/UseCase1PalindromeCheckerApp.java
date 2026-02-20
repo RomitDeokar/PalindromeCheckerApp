@@ -1,8 +1,10 @@
-// File: UseCase5PalindromeCheckerApp.java
+// File: UseCase6PalindromeCheckerApp.java
 
 import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
-public class UseCase5PalindromeCheckerApp {
+public class UseCase6PalindromeCheckerApp {
 
     // Application metadata
     private static final String APP_NAME = "Palindrome Checker App";
@@ -33,6 +35,12 @@ public class UseCase5PalindromeCheckerApp {
         String testStringUC5 = "deified";
         System.out.println("UC5 check (using stack):");
         checkPalindromeUsingStack(testStringUC5);
+        System.out.println();
+
+        // UC6: Using queue + stack to demonstrate FIFO vs LIFO
+        String testStringUC6 = "rotator";
+        System.out.println("UC6 check (using queue + stack):");
+        checkPalindromeUsingQueueAndStack(testStringUC6);
     }
 
     private static void displayWelcomeMessage() {
@@ -105,6 +113,36 @@ public class UseCase5PalindromeCheckerApp {
         }
 
         if (input.equals(reversed)) {
+            System.out.println("The string \"" + input + "\" is a palindrome.");
+        } else {
+            System.out.println("The string \"" + input + "\" is NOT a palindrome.");
+        }
+    }
+
+    private static void checkPalindromeUsingQueueAndStack(String input) {
+        Queue<Character> queue = new LinkedList<>();
+        Stack<Character> stack = new Stack<>();
+
+        // Enqueue and push all characters
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            queue.add(c);  // FIFO
+            stack.push(c); // LIFO
+        }
+
+        boolean isPalindrome = true;
+
+        // Compare dequeued vs popped characters
+        while (!queue.isEmpty() && !stack.isEmpty()) {
+            char fromQueue = queue.remove();
+            char fromStack = stack.pop();
+            if (fromQueue != fromStack) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        if (isPalindrome) {
             System.out.println("The string \"" + input + "\" is a palindrome.");
         } else {
             System.out.println("The string \"" + input + "\" is NOT a palindrome.");
