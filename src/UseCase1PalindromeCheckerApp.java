@@ -1,6 +1,6 @@
-// File: UseCase1PalindromeCheckerApp.java
+// File: UseCase2PalindromeCheckerApp.java
 
-public class UseCase1PalindromeCheckerApp {
+public class UseCase2PalindromeCheckerApp {
 
     // Application metadata
     private static final String APP_NAME = "Palindrome Checker App";
@@ -9,7 +9,10 @@ public class UseCase1PalindromeCheckerApp {
     // Entry point of the application
     public static void main(String[] args) {
         displayWelcomeMessage();
-        // In the future, you can call the next use case here
+
+        // UC2: Hardcoded palindrome check
+        String testString = "madam"; // You can change this string to test other words
+        checkPalindrome(testString);
     }
 
     // Method to display the welcome message
@@ -20,5 +23,16 @@ public class UseCase1PalindromeCheckerApp {
         System.out.println("This application checks whether a string is a palindrome.");
         System.out.println("=====================================");
         System.out.println();
+    }
+
+    // Method to check if a string is a palindrome
+    private static void checkPalindrome(String input) {
+        String reversed = new StringBuilder(input).reverse().toString();
+
+        if (input.equals(reversed)) {
+            System.out.println("The string \"" + input + "\" is a palindrome.");
+        } else {
+            System.out.println("The string \"" + input + "\" is NOT a palindrome.");
+        }
     }
 }
