@@ -1,10 +1,11 @@
-// File: UseCase6PalindromeCheckerApp.java
+// File: UseCase7PalindromeCheckerApp.java
 
 import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Deque;
 
-public class UseCase6PalindromeCheckerApp {
+public class UseCase7PalindromeCheckerApp {
 
     // Application metadata
     private static final String APP_NAME = "Palindrome Checker App";
@@ -41,6 +42,12 @@ public class UseCase6PalindromeCheckerApp {
         String testStringUC6 = "rotator";
         System.out.println("UC6 check (using queue + stack):");
         checkPalindromeUsingQueueAndStack(testStringUC6);
+        System.out.println();
+
+        // UC7: Using deque to optimize palindrome check
+        String testStringUC7 = "civic";
+        System.out.println("UC7 check (using deque):");
+        checkPalindromeUsingDeque(testStringUC7);
     }
 
     private static void displayWelcomeMessage() {
@@ -101,12 +108,10 @@ public class UseCase6PalindromeCheckerApp {
     private static void checkPalindromeUsingStack(String input) {
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters onto stack
         for (int i = 0; i < input.length(); i++) {
             stack.push(input.charAt(i));
         }
 
-        // Pop characters to build reversed string
         String reversed = "";
         while (!stack.isEmpty()) {
             reversed += stack.pop();
@@ -123,20 +128,40 @@ public class UseCase6PalindromeCheckerApp {
         Queue<Character> queue = new LinkedList<>();
         Stack<Character> stack = new Stack<>();
 
-        // Enqueue and push all characters
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            queue.add(c);  // FIFO
-            stack.push(c); // LIFO
+            queue.add(c);
+            stack.push(c);
+        }
+
+        boolean isPalindrome = true;
+        while (!queue.isEmpty() && !stack.isEmpty()) {
+            if (queue.remove() != stack.pop()) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        if (isPalindrome) {
+            System.out.println("The string \"" + input + "\" is a palindrome.");
+        } else {
+            System.out.println("The string \"" + input + "\" is NOT a palindrome.");
+        }
+    }
+
+    private static void checkPalindromeUsingDeque(String input) {
+        Deque<Character> deque = new LinkedList<>();
+
+        // Insert all characters into deque
+        for (int i = 0; i < input.length(); i++) {
+            deque.addLast(input.charAt(i));
         }
 
         boolean isPalindrome = true;
 
-        // Compare dequeued vs popped characters
-        while (!queue.isEmpty() && !stack.isEmpty()) {
-            char fromQueue = queue.remove();
-            char fromStack = stack.pop();
-            if (fromQueue != fromStack) {
+        // Compare first and last until deque is empty
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
                 isPalindrome = false;
                 break;
             }
