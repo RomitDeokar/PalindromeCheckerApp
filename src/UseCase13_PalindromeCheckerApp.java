@@ -1,12 +1,12 @@
-// File: UseCase12PalindromeCheckerApp.java
+// File: UseCase13PalindromeCheckerApp.java
 
 import java.util.*;
 
-public class UseCase12_PalindromeCheckerApp {
+public class UseCase13_PalindromeCheckerApp {
 
     // ================= UC1 =================
     private static final String APP_NAME = "Palindrome Checker App";
-    private static final String APP_VERSION = "5.0";
+    private static final String APP_VERSION = "6.0";
 
     // =====================================================
     // ================= UC12 STRATEGY =====================
@@ -86,36 +86,75 @@ public class UseCase12_PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        displayWelcomeMessage(); // UC1
+        displayWelcomeMessage();
 
-        checkPalindromeUsingStringBuilder("madam");     // UC2
-        checkPalindromeUsingLoop("racecar");            // UC3
-        checkPalindromeUsingCharArray("level");         // UC4
-        checkPalindromeUsingStack("deified");           // UC5
-        checkPalindromeUsingQueueAndStack("rotator");   // UC6
-        checkPalindromeUsingDeque("civic");             // UC7
-        checkPalindromeUsingLinkedList("noon");         // UC8
-        checkPalindromeUsingRecursion("refer");         // UC9
-        checkPalindromeIgnoringCase("A man a plan a canal Panama"); // UC10
+        String test = "A man a plan a canal Panama";
 
-        // UC11
+        checkPalindromeUsingStringBuilder("madam");
+        checkPalindromeUsingLoop("racecar");
+        checkPalindromeUsingCharArray("level");
+        checkPalindromeUsingStack("deified");
+        checkPalindromeUsingQueueAndStack("rotator");
+        checkPalindromeUsingDeque("civic");
+        checkPalindromeUsingLinkedList("noon");
+        checkPalindromeUsingRecursion("refer");
+        checkPalindromeIgnoringCase(test);
+
         PalindromeChecker service = new PalindromeChecker();
-        printResult("UC11 (OOP Service)",
-                "Was it a car or a cat I saw",
-                service.checkPalindrome("Was it a car or a cat I saw"));
+        printResult("UC11 (OOP Service)", test, service.checkPalindrome(test));
 
-        // UC12
-        System.out.println("\nUC12 (Strategy Pattern)");
-        String test = "Never odd or even";
         PalindromeContext context = new PalindromeContext(new StackStrategy());
-        printResult("Stack Strategy", test, context.execute(test));
+        printResult("UC12 (Stack Strategy)", test, context.execute(test));
 
         context.setStrategy(new DequeStrategy());
-        printResult("Deque Strategy", test, context.execute(test));
+        printResult("UC12 (Deque Strategy)", test, context.execute(test));
+
+        // ================= UC13 =================
+        runPerformanceComparison(test);
     }
 
     // =====================================================
-    // ================= NORMALIZER ========================
+    // ================= UC13 ==============================
+    // =====================================================
+
+    private static void runPerformanceComparison(String input) {
+
+        System.out.println("\nUC13 (Performance Comparison)");
+
+        PalindromeChecker service = new PalindromeChecker();
+        PalindromeContext stackContext = new PalindromeContext(new StackStrategy());
+        PalindromeContext dequeContext = new PalindromeContext(new DequeStrategy());
+
+        long start, end;
+
+        // OOP Service Timing
+        start = System.nanoTime();
+        service.checkPalindrome(input);
+        end = System.nanoTime();
+        System.out.println("OOP Service Time: " + (end - start) + " ns");
+
+        // Stack Strategy Timing
+        start = System.nanoTime();
+        stackContext.execute(input);
+        end = System.nanoTime();
+        System.out.println("Stack Strategy Time: " + (end - start) + " ns");
+
+        // Deque Strategy Timing
+        start = System.nanoTime();
+        dequeContext.execute(input);
+        end = System.nanoTime();
+        System.out.println("Deque Strategy Time: " + (end - start) + " ns");
+
+        // StringBuilder Timing
+        start = System.nanoTime();
+        String normalized = normalize(input);
+        normalized.equals(new StringBuilder(normalized).reverse().toString());
+        end = System.nanoTime();
+        System.out.println("StringBuilder Time: " + (end - start) + " ns");
+    }
+
+    // =====================================================
+    // ================= UTILITIES =========================
     // =====================================================
 
     private static String normalize(String input) {
@@ -124,16 +163,11 @@ public class UseCase12_PalindromeCheckerApp {
                 .replaceAll("[^a-z]", "");
     }
 
-    // =====================================================
-    // ================= UC2 ===============================
-    // =====================================================
-
     private static void checkPalindromeUsingStringBuilder(String input) {
         String reversed = new StringBuilder(input).reverse().toString();
         printResult("UC2 (StringBuilder)", input, input.equals(reversed));
     }
 
-    // UC3
     private static void checkPalindromeUsingLoop(String input) {
         String reversed = "";
         for (int i = input.length() - 1; i >= 0; i--)
@@ -141,7 +175,6 @@ public class UseCase12_PalindromeCheckerApp {
         printResult("UC3 (Loop)", input, input.equals(reversed));
     }
 
-    // UC4
     private static void checkPalindromeUsingCharArray(String input) {
         char[] arr = input.toCharArray();
         int l = 0, r = arr.length - 1;
@@ -153,7 +186,6 @@ public class UseCase12_PalindromeCheckerApp {
         printResult("UC4 (Char Array)", input, result);
     }
 
-    // UC5
     private static void checkPalindromeUsingStack(String input) {
         Stack<Character> stack = new Stack<>();
         for (char c : input.toCharArray()) stack.push(c);
@@ -162,7 +194,6 @@ public class UseCase12_PalindromeCheckerApp {
         printResult("UC5 (Stack)", input, input.equals(reversed));
     }
 
-    // UC6
     private static void checkPalindromeUsingQueueAndStack(String input) {
         Queue<Character> queue = new LinkedList<>();
         Stack<Character> stack = new Stack<>();
@@ -176,7 +207,6 @@ public class UseCase12_PalindromeCheckerApp {
         printResult("UC6 (Queue + Stack)", input, result);
     }
 
-    // UC7
     private static void checkPalindromeUsingDeque(String input) {
         Deque<Character> deque = new LinkedList<>();
         for (char c : input.toCharArray()) deque.addLast(c);
@@ -186,7 +216,6 @@ public class UseCase12_PalindromeCheckerApp {
         printResult("UC7 (Deque)", input, result);
     }
 
-    // UC8
     private static void checkPalindromeUsingLinkedList(String input) {
         Node head = null, tail = null;
         for (char c : input.toCharArray()) {
@@ -216,7 +245,6 @@ public class UseCase12_PalindromeCheckerApp {
         printResult("UC8 (Linked List)", input, result);
     }
 
-    // UC9
     private static void checkPalindromeUsingRecursion(String input) {
         printResult("UC9 (Recursion)", input,
                 recursiveCheck(input, 0, input.length() - 1));
@@ -228,14 +256,12 @@ public class UseCase12_PalindromeCheckerApp {
         return recursiveCheck(str, l + 1, r - 1);
     }
 
-    // UC10
     private static void checkPalindromeIgnoringCase(String input) {
         String normalized = normalize(input);
         printResult("UC10 (Ignore Case & Spaces)", input,
                 normalized.equals(new StringBuilder(normalized).reverse().toString()));
     }
 
-    // COMMON RESULT
     private static void printResult(String method, String input, boolean result) {
         if (result)
             System.out.println(method + " → \"" + input + "\" is a palindrome.");
