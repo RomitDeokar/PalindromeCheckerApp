@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Deque;
 
-public class UseCase8PalindromeCheckerApp {
+public class PalindromeCheckerApp {
 
     // Application metadata
     private static final String APP_NAME = "Palindrome Checker App";
