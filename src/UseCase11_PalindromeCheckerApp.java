@@ -1,15 +1,48 @@
-// File: UseCase10PalindromeCheckerApp.java
+// File: UseCase11PalindromeCheckerApp.java
 
 import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Deque;
 
-public class UseCase10_PalindromeCheckerApp {
+public class UseCase11_PalindromeCheckerApp {
 
     private static final String APP_NAME = "Palindrome Checker App";
-    private static final String APP_VERSION = "2.0";
+    private static final String APP_VERSION = "3.0";
 
+    // ================= UC11 CLASS =================
+    // OOP-based Palindrome Service
+    static class PalindromeChecker {
+
+        // Encapsulated method
+        public boolean checkPalindrome(String input) {
+
+            if (input == null) return false;
+
+            // Normalize (ignore case & spaces)
+            String normalized = input
+                    .toLowerCase()
+                    .replaceAll("\\s+", "")
+                    .replaceAll("[^a-z]", "");
+
+            char[] chars = normalized.toCharArray();
+
+            int left = 0;
+            int right = chars.length - 1;
+
+            while (left < right) {
+                if (chars[left] != chars[right]) {
+                    return false;
+                }
+                left++;
+                right--;
+            }
+
+            return true;
+        }
+    }
+
+    // ================= NODE CLASS (UC8) =================
     static class Node {
         char data;
         Node next;
@@ -19,8 +52,6 @@ public class UseCase10_PalindromeCheckerApp {
             this.next = null;
         }
     }
-
-    static Node leftPointer;
 
     public static void main(String[] args) {
 
@@ -51,11 +82,19 @@ public class UseCase10_PalindromeCheckerApp {
         System.out.println("\nUC9 check (using recursion):");
         checkPalindromeUsingRecursion("refer");
 
-        // ===== UC10 =====
+        // UC10
         System.out.println("\nUC10 check (Case-Insensitive & Space-Ignored):");
-        checkPalindromeIgnoringCaseAndSpaces("Madam");
-        checkPalindromeIgnoringCaseAndSpaces("nurses run");
         checkPalindromeIgnoringCaseAndSpaces("A man a plan a canal Panama");
+
+        // ================= UC11 =================
+        System.out.println("\nUC11 check (Object-Oriented Service):");
+
+        PalindromeChecker service = new PalindromeChecker();
+
+        String testInput = "Was it a car or a cat I saw";
+        boolean result = service.checkPalindrome(testInput);
+
+        printResult("UC11 (OOP Service)", testInput, result);
     }
 
     private static void displayWelcomeMessage() {
@@ -101,7 +140,6 @@ public class UseCase10_PalindromeCheckerApp {
     // ================= UC5 =================
     private static void checkPalindromeUsingStack(String input) {
         Stack<Character> stack = new Stack<>();
-
         for (char c : input.toCharArray()) {
             stack.push(c);
         }
@@ -210,27 +248,19 @@ public class UseCase10_PalindromeCheckerApp {
     }
 
     private static boolean recursiveCheck(String str, int left, int right) {
-        if (left >= right) {
-            return true;
-        }
-
-        if (str.charAt(left) != str.charAt(right)) {
-            return false;
-        }
-
+        if (left >= right) return true;
+        if (str.charAt(left) != str.charAt(right)) return false;
         return recursiveCheck(str, left + 1, right - 1);
     }
 
     // ================= UC10 =================
     private static void checkPalindromeIgnoringCaseAndSpaces(String input) {
 
-        // Step 1: Normalize string
         String normalized = input
-                .toLowerCase()                // ignore case
-                .replaceAll("\\s+", "")       // remove spaces using regex
-                .replaceAll("[^a-z]", "");    // remove special characters (optional improvement)
+                .toLowerCase()
+                .replaceAll("\\s+", "")
+                .replaceAll("[^a-z]", "");
 
-        // Step 2: Apply previous logic (Char Array method)
         char[] chars = normalized.toCharArray();
         int left = 0, right = chars.length - 1;
         boolean isPalindrome = true;
